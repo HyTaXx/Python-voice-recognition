@@ -1,13 +1,11 @@
 import speech_recognition as sr
-import openai
+import numpy as np
 import os
-
-openai.organization = "org-ulvfezPys2jck7pQb5f0sYNQ"
-openai.api_key = "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"
-openai.Model.list()
+import math
 
 # Créer un objet Recognizer
 r = sr.Recognizer()
+pi = 3.1416
 
 # Ouvrir le flux audio à partir du micro
 with sr.Microphone() as source:
@@ -19,14 +17,15 @@ try:
     # Utiliser Google Speech Recognition pour transcrire le discours en texte
     texte = r.recognize_google(audio, language='fr-FR')
     print("Vous avez dit : " + texte)
+    for i in range(len(texte)):
+        if texte[i] == "x":
+            texte = texte[:i] + "*" + texte[i+1:]
 
-    # Utiliser l'API OpenAI GPT-3 pour résoudre le problème donné à l'oral
-    completions = openai.Completion.create(
-        engine="davinci", prompt=texte+"?", max_tokens=100
-    )
+    # Évaluer la réponse mathématique donnée à l'oral
+    result = str(eval(texte))
 
-    # Afficher la réponse générée par l'API OpenAI GPT-3
-    print(completions.choices[0].text)
+    # Afficher le résultat
+    print("Le résultat est : " + result)
 
 except sr.UnknownValueError:
     print("Impossible de comprendre l'audio")
