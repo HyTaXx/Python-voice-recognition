@@ -7,6 +7,7 @@ import math
 r = sr.Recognizer()
 pi = 3.1416
 option = 0
+
 # Ouvrir le flux audio à partir du micro
 with sr.Microphone() as source:
     print("Parlez maintenant...")
@@ -18,6 +19,8 @@ try:
     texte = r.recognize_google(audio, language='fr-FR')
     if texte.find("racine") != -1:
         option = 1
+    if texte.find("%") != -1:
+        option = 2
     print("Vous avez dit : " + texte)
     for i in range(len(texte)):
         if texte[i] == "x":
@@ -29,9 +32,14 @@ try:
     # Évaluer la réponse mathématique donnée à l'oral
     if option == 0:
         result = str(eval(texte))
-    else : 
+    elif option == 1:
         texte = texte.replace("racine de", "")
         result = math.sqrt(int(texte))
+    else :
+        diviseur = int((texte.split("de")[0]).replace(" %", ""))
+        divisé = int(texte.split("de")[1])
+        result=(diviseur/100)*divisé
+        #result = percentage(int(texte.split("sur")[0].replace(" %", "")), int(texte.split("sur")[1]))
 
     # Afficher le résultat
     print("Le résultat est : " + str(result))
