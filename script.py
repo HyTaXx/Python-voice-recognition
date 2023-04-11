@@ -2,8 +2,8 @@ import speech_recognition as sr
 import openai
 import os
 
-openai.organization = "org-HPvNNcKGWKq4IiEv6ucQSwsC"
-openai.api_key = "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"
+openai.organization = "org-ulvfezPys2jck7pQb5f0sYNQ"
+openai.api_key = "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"
 openai.Model.list()
 
 # Créer un objet Recognizer
