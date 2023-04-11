@@ -6,7 +6,7 @@ import math
 # Créer un objet Recognizer
 r = sr.Recognizer()
 pi = 3.1416
-
+option = 0
 # Ouvrir le flux audio à partir du micro
 with sr.Microphone() as source:
     print("Parlez maintenant...")
@@ -16,16 +16,25 @@ with sr.Microphone() as source:
 try:
     # Utiliser Google Speech Recognition pour transcrire le discours en texte
     texte = r.recognize_google(audio, language='fr-FR')
+    if texte.find("racine") != -1:
+        option = 1
     print("Vous avez dit : " + texte)
     for i in range(len(texte)):
         if texte[i] == "x":
-            texte = texte[:i] + "*" + texte[i+1:]
+            texte=texte.replace("x", "*")
+
+    texte=texte.replace("au carré", "**2")
+    texte=texte.replace("au cube", "**3")
 
     # Évaluer la réponse mathématique donnée à l'oral
-    result = str(eval(texte))
+    if option == 0:
+        result = str(eval(texte))
+    else : 
+        texte = texte.replace("racine de", "")
+        result = math.sqrt(int(texte))
 
     # Afficher le résultat
-    print("Le résultat est : " + result)
+    print("Le résultat est : " + str(result))
 
 except sr.UnknownValueError:
     print("Impossible de comprendre l'audio")
